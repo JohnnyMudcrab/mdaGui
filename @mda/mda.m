@@ -16,7 +16,7 @@ classdef mda < handle
       
       this.gui = gui.framework('+gui/gui.cfg','gui'); %#ok<*PROP>
       
-      this.gui.showGui();
+      set(this.gui.getHandle('sliderInfo'), 'Enable', 'Off')
       
     end
     

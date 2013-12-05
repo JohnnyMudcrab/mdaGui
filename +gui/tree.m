@@ -21,7 +21,7 @@ classdef tree < handle
     
     
     % add and remove nodes
-    function add(this, nodes, isLeaf, parent)
+    function add(this, nodes, isLeaf, data, parent)
       
       if ~iscell(nodes)
         nodes = cellstr(nodes);
@@ -32,7 +32,14 @@ classdef tree < handle
       for i = 1:numel(nodes)
         
         if ~this.isDuplicate(nodes{i}, parentNode)
-          node = uitreenode('v0',handle(this.handle), nodes{i}, [], isLeaf); %#ok<*PROP>
+          data.string = nodes{i};
+          if numel(data.string) > 20
+            node = uitreenode('v0',handle(this.handle), ['...' data.string(end-20:end)], [], isLeaf); %#ok<*PROP>
+          else
+            node = uitreenode('v0',handle(this.handle), data.string, [], isLeaf); %#ok<*PROP>
+          end
+          
+          node.handle.UserData = data;
           parentNode.add(node);
         end
         
@@ -42,6 +49,10 @@ classdef tree < handle
        
     end
     
+    % getter
+    function selectedNodes = getSelectedNodes(this)
+      selectedNodes = this.handle.getSelectedNodes;
+    end
     
     % utilities
     function disableMultipleSelection(this)
@@ -83,7 +94,7 @@ classdef tree < handle
         end
         
         while(~isempty(tempNode))
-          if strcmp(tempNode.getName,parent)
+          if strcmp(tempNode.handle.UserData.string,parent)
             parentNode = tempNode;
             tempNode = [];
           else
@@ -111,7 +122,7 @@ classdef tree < handle
       end
 
       while(~isempty(tempNode))
-        if strcmp(tempNode.getName, node)
+        if strcmp(tempNode.handle.UserData.string, node)
           dublicate = true;
           return
         else

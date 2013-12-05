@@ -10,8 +10,8 @@ function menuAdd(this)
   if path ~= 0 
     
     hTree = this.getHandle('treeMain');
-    hTree.add(path, false, 'Workspace');
-    hTree.add(file, true, path);
+    hTree.add(path, false, [], 'Workspace');
+    hTree.add(file, true, [], path);
     
   end
 

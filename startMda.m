@@ -1,3 +1,7 @@
+% TODO: toolbar für figure
+% TODO: consistenz vond aten sicher stellen (infobar)
+
+
 % create mda object
 hMda = mda();
 
