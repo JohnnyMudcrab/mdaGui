@@ -1,4 +1,13 @@
 function menuRemove(this)
-  msgbox('menuRemove','Callback Test','help');
-end
 
+  this.changeStatus('statusMain', 'Busy...');
+
+  % get tree
+  hTree = this.getHandle('treeMain');
+  
+  % save tree
+  hTree.removeSelectedNodes(); 
+  
+  this.changeStatus('statusMain', 'Ready...');
+  
+end

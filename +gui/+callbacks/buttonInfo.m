@@ -32,13 +32,14 @@ function buttonInfo(this)
     
   % update info panel
   set(this.getHandle('textInfoName2'), 'String', [path file])
-  set(this.getHandle('textInfoResolution2'), 'String', [num2str(info(1, 1).Width) num2str(info(1, 1).Height)])
+  set(this.getHandle('textInfoResolution2'), 'String', [num2str(info(1, 1).Width) ' x ' num2str(info(1, 1).Height)])
   set(this.getHandle('textInfoNumber2'), 'String', num2str(numel(info)))
   set(this.getHandle('textInfoFrame'), 'String', ['1 / ' num2str(numel(info))])
   
   % enable slider
   set(this.getHandle('sliderInfo'), 'Enable', 'On');
-  set(this.getHandle('sliderInfo'), 'Value', 1);
+  sliderStep = [1 10] / (numel(info) - 1);
+  set(this.getHandle('sliderInfo'), 'Min', 1, 'Max', numel(info), 'SliderStep', sliderStep, 'Value', 1)
     
   %set status to ready
   this.changeStatus('statusMain', 'Ready...');

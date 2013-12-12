@@ -6,7 +6,8 @@ function sliderInfo(this)
   % get slider value
   index = int32(get(this.getHandle('sliderInfo'),'Value'));
   set(this.getHandle('sliderInfo'),'Value',index);
-  set(this.getHandle('textInfoFrame'), 'String',[num2str(index) ' / '])
+  set(this.getHandle('textInfoFrame'), 'String', ...
+    [num2str(index) ' / ' get(this.getHandle('textInfoNumber2'), 'String')])
   
   % show picture in axes
   axes(this.getHandle('axesInfo'))

@@ -49,6 +49,35 @@ classdef tree < handle
        
     end
     
+    function removeSelectedNodes(this)
+      
+      selectedNodes = this.getSelectedNodes(); 
+
+      if ~isempty(selectedNodes)
+
+        for i = 1:1:size(selectedNodes,1)
+
+          level = selectedNodes(i).getLevel; 
+
+          if level 
+
+            parent = selectedNodes(i).getParent;
+            selectedNodes(i).removeFromParent; 
+            if ~parent.getChildCount && ~isempty(parent.getParent)
+              this.root.remove(parent);
+            end      
+
+          else 
+            this.root.removeAllChildren; 
+          end  
+          
+        end
+      end
+
+      this.reloadTree(); 
+      
+    end
+    
     % getter
     function selectedNodes = getSelectedNodes(this)
       selectedNodes = this.handle.getSelectedNodes;
@@ -67,11 +96,99 @@ classdef tree < handle
       
     end
     
+    function save(this)
+      
+      [file, path] = uiputfile;
+      
+      if path ~= 0 
+        
+        count = this.root.LeafCount;
+        
+        if count
+          
+          saveList = cell(count, 2);
+          listCount = 0;
+          tempParent = this.root.getFirstChild;
+          
+          while(~isempty(tempParent))
+            tempChild = tempParent.getFirstChild;
+            
+            while(~isempty(tempChild))
+              listCount = listCount + 1;
+              saveList{listCount,1} = [char(tempParent.getName) char(tempChild.getName)];
+              saveList{listCount,2} = tempChild.handle.UserData; 
+              tempChild = tempParent.getChildAfter(tempChild);
+            end
+            
+            tempParent = this.root.getChildAfter(tempParent);
+          end
+          
+        else
+          saveList = {}; %#ok<NASGU>
+        end
+
+        treeKey = 1; %#ok<NASGU>
+        save([path file], 'saveList','treeKey')
+        
+      end
+      
+    end
+    
+    function load(this)
+      
+        [file,path,~] = uigetfile('*.mat','Select the MATLAB code file');
+
+        if path ~= 0 
+
+          filename = textscan(file, '%s %s', 'delimiter','.'); 
+                                                             
+          % check if file is a mat-file
+          if strcmp(filename{2}{1},'mat') == 0
+             waitfor(msgbox('Kein mat ausgewaehlt!',...
+                         'ERROR','error')); 
+             return; 
+          end
+
+          % load file
+          load([path file]);
+        end
+        
+        % check if it is a tree file
+        if ismember('treeKey',who) 
+
+          this.root.removeAllChildren;
+
+          n = size(saveList,1); %#ok<USENS>
+
+          % loop over tree
+          for i = 1:1:n
+            result = strfind(saveList{i,1},'/');
+            file = saveList{i,1}(result(end) + 1: size(saveList{i,1},2));
+            path = saveList{i,1}(1:result(end));
+            userData = saveList{i,2};
+
+            this.add(path, false, [], 'Workspace');
+            this.add(file, true, userData, path);
+            
+          end
+
+          this.reloadTree();
+        else
+           warndlg('Not a tree file');
+        end
+
+      
+    end
+    
     function saveExpansionState(this)
       
     end
     
     function restoreExpansionState(this)
+    end
+    
+    function reloadTree(this)
+      this.handle.reloadNode(this.root); 
     end
     
   end

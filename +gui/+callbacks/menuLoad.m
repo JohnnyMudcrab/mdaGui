@@ -1,4 +1,14 @@
 function menuLoad(this)
-  msgbox('menuLoad','Callback Test','help');
+
+  this.changeStatus('statusMain', 'Busy...');
+  
+  % get tree
+  hTree = this.getHandle('treeMain');
+  
+  % save tree
+  hTree.load();
+  
+  this.changeStatus('statusMain', 'Ready...');
+  
 end
 
