@@ -14,6 +14,9 @@ setappdata(0,'hMda',hMda);
 % change closing function in order to purge appdata correctly
 set(gcf,'CloseRequestFcn',@hMda.closingFcn);
 
+% % create toolbar
+gui.initToolbar;
+
 % set gui state to ready
 hMda.gui.changeStatus('statusMain', 'Ready...');
 
