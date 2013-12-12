@@ -1,4 +1,4 @@
-function buttonInfo(this)
+function [] = toolbarApply(this)
 
   %set status to busy
   this.changeStatus('statusMain', 'Busy...');
@@ -25,10 +25,14 @@ function buttonInfo(this)
   path = selectedNodes(1).getParent.handle.UserData.string;
   
   % show picture in axes
-  axes(this.getHandle('axesInfo'))
   info = imfinfo([path file]); 
   img = imread([path file],'Index',1,'Info',info); 
+  
+  axes(this.getHandle('axesLocate'))
   imshow(double(img) / 255) 
+  
+  axes(this.getHandle('axesInfo'))
+  imshow(double(img) / 255)
     
   % update info panel
   set(this.getHandle('textInfoName2'), 'String', [path file])
@@ -55,12 +59,19 @@ function buttonInfo(this)
     set(this.getHandle('textInfoStateCalibrate'), 'String', 'Not Calibrated Yet')
   end
   
-  set(this.getHandle('textInfoFrame'), 'String', ['1 / ' num2str(numel(info))])
   
-  % enable slider
+  % enable slider info
+  set(this.getHandle('textInfoFrame'), 'String', ['1 / ' num2str(numel(info))])
   set(this.getHandle('sliderInfo'), 'Enable', 'On');
   sliderStep = [1 10] / (numel(info) - 1);
   set(this.getHandle('sliderInfo'), 'Min', 1, 'Max', numel(info), 'SliderStep', sliderStep, 'Value', 1)
+  
+  % enable locate
+  set(this.getHandle('textLocateFrame'), 'String', ['1 / ' num2str(numel(info))])
+  set(this.getHandle('sliderLocate'), 'Enable', 'On');
+  sliderStep = [1 10] / (numel(info) - 1);
+  set(this.getHandle('sliderLocate'), 'Min', 1, 'Max', numel(info), 'SliderStep', sliderStep, 'Value', 1)
+  set(this.getHandle('buttonLocateApply'), 'Enable', 'on')
     
   %set status to ready
   this.changeStatus('statusMain', 'Ready...');

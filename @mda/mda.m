@@ -16,7 +16,14 @@ classdef mda < handle
       
       this.gui = gui.framework('+gui/gui.cfg','gui'); %#ok<*PROP>
       
+      % disable slider
       set(this.gui.getHandle('sliderInfo'), 'Enable', 'Off')
+      set(this.gui.getHandle('sliderLocate'), 'Enable', 'Off')
+      set(this.gui.getHandle('sliderTrack'), 'Enable', 'Off')
+      set(this.gui.getHandle('sliderCalibrate'), 'Enable', 'Off')
+      
+      % disable button
+      set(this.gui.getHandle('buttonLocateApply'), 'Enable', 'Off')
       
     end
     

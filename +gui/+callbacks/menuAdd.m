@@ -9,9 +9,14 @@ function menuAdd(this)
   % check if uigetfile was cancled
   if path ~= 0 
     
+    data.locate = [];
+    data.track = [];
+    data.calibrate = [];
+    data.config = [];
+    
     hTree = this.getHandle('treeMain');
     hTree.add(path, false, [], 'Workspace');
-    hTree.add(file, true, [], path);
+    hTree.add(file, true, data, path);
     
   end
 

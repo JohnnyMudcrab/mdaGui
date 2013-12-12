@@ -1,5 +1,6 @@
-% TODO: toolbar für figure
-% TODO: consistenz vond aten sicher stellen (infobar)
+% TODO: zoom in figure für all frames gleich
+% TODO: was wenn current image entfernt wird?
+% TODO: consistenz von daten sicher stellen (infobar)
 
 
 % create mda object
@@ -14,8 +15,8 @@ setappdata(0,'hMda',hMda);
 % change closing function in order to purge appdata correctly
 set(gcf,'CloseRequestFcn',@hMda.closingFcn);
 
-% % create toolbar
-gui.initToolbar;
+% create toolbar
+gui.initToolbar(hMda.gui);
 
 % set gui state to ready
 hMda.gui.changeStatus('statusMain', 'Ready...');

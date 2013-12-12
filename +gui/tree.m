@@ -115,7 +115,7 @@ classdef tree < handle
             
             while(~isempty(tempChild))
               listCount = listCount + 1;
-              saveList{listCount,1} = [char(tempParent.getName) char(tempChild.getName)];
+              saveList{listCount,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
               saveList{listCount,2} = tempChild.handle.UserData; 
               tempChild = tempParent.getChildAfter(tempChild);
             end
