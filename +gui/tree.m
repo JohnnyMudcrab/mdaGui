@@ -57,12 +57,12 @@ classdef tree < handle
 
         for i = 1:1:size(selectedNodes,1)
 
-          level = selectedNodes(i).getLevel; 
+          level = selectedNodes{1}.getLevel; 
 
           if level 
 
-            parent = selectedNodes(i).getParent;
-            selectedNodes(i).removeFromParent; 
+            parent = selectedNodes{1}.getParent;
+            selectedNodes{1}.removeFromParent; 
             if ~parent.getChildCount && ~isempty(parent.getParent)
               this.root.remove(parent);
             end      
@@ -79,8 +79,81 @@ classdef tree < handle
     end
     
     % getter
-    function selectedNodes = getSelectedNodes(this)
+    function [selectedNodes, filenames, error] = getSelectedNodes(this, option)
+      
+      if nargin < 2
+        option = 'multiple';
+      end
+      
+      error = [];
+      
       selectedNodes = this.handle.getSelectedNodes;
+      
+      
+      % check if empty
+      if isempty(selectedNodes)
+        error = 1;
+        return
+      end
+      
+      
+      % check if only one leaf is selected
+      if strcmp(option, 'single')
+        
+        if numel(selectedNodes) > 1 || ~selectedNodes(1).isLeaf
+          selectedNodes = [];
+          error = 2;
+        end
+        
+        return
+        
+      end
+
+      
+      % make it unique    
+      n = size(selectedNodes,1);
+      
+      filenames  = {};
+      nodes   = {};
+      count   = 0;
+
+      for i = 1:1:n
+        level = selectedNodes(1).getLevel;
+        if level == 0
+          tempParent = selectedNodes(1).getFirstChild;
+          while(~isempty(tempParent))
+            tempChild = tempParent.getFirstChild;
+            while(~isempty(tempChild))
+              count = count + 1;
+              nodes{count,1} = tempChild;
+              filenames{count,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
+              tempChild = tempParent.getChildAfter(tempChild);
+            end
+            tempParent = selectedNodes(1).getChildAfter(tempParent);
+          end
+        elseif level == 1
+          tempChild = selectedNodes(1).getFirstChild;
+          while(~isempty(tempChild))
+            tempParent = tempChild.getParent;
+            count = count + 1;
+            nodes{count,1} = tempChild;
+            filenames{count,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
+            tempChild = selectedNodes(1).getChildAfter(tempChild);
+          end
+        else
+           tempChild = selectedNodes(1);
+           tempParent = tempChild.getParent;
+           count = count + 1;
+           nodes{count,1} = tempChild;
+           filenames{count,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
+        end
+      end
+
+     [filenames, nodeIndex] = unique(filenames,'first');
+
+     selectedNodes = nodes(nodeIndex);
+
+ 
     end
     
     % utilities
