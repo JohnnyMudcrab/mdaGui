@@ -4,6 +4,7 @@ classdef mda < handle
     
     gui;
     stop;
+    currentNode;
     
   end
   
@@ -28,68 +29,36 @@ classdef mda < handle
       % disable button
       set(this.gui.getHandle('buttonLocateApply'), 'Enable', 'Off')
       set(this.gui.getHandle('buttonLocateApplyAll'), 'Enable', 'Off')
+      set(this.gui.getHandle('buttonTrack'), 'Enable', 'Off')
       
-    end
-    
-    function locate(this)
-      
+      % set mouseclick action for hTree
       hTree = this.gui.getHandle('treeMain');
-      
-      
-      [selectedNodes, filenames, ~] = hTree.getSelectedNodes();
-      
-      if isempty(selectedNodes)
-        msgbox('No Image selected','No Image','Help')
-        return
-      end
-      
-      n = numel(selectedNodes);
-      
-      for i = 1:n
-        
-        filename = filenames{i}; 
-        
-        info = imfinfo(filename); 
-        nFrames = numel(info); 
-
-        currentNode = selectedNodes{i};
-
-        data = currentNode.handle.UserData;
-
-        data.locate = cell(nFrames,1); 
-
-
-        % Locate Particles in every Frame
-
-        for j = 1:1:nFrames 
-          
-          if(this.stop)
-            this.stop = false;
-            return;
-          end
-          
-          this.gui.changeStatus('statusMain', ['Busy...Processing Image ' num2str(i) ' of ' num2str(n) ...
-                                ', Frame ' num2str(j) ' of ' num2str(nFrames)]);
-                              
-          drawnow
-
-          img = imread(filename,'Index',j,'Info',info); 
-
-          gConfs = locateParticles2D(img, []); 
-
-          data.locate{j,1} = gConfs;
-
-        end
-
-        currentNode.handle.UserData = data;
-        
-      end
+      jTree = handle(hTree.handle.getTree,'CallbackProperties');
+      set(jTree, 'MousePressedCallback', @this.mousePressedCallback);    
       
     end
+
+    
+    apply(this)
+    
+    locate(this, overwrite)
+    
+    track(this, overwrite)
     
   end
   
   methods(Static)
+    
+    function mousePressedCallback(~, eventData)
+      
+      this = getappdata(0, 'hMda');
+
+      if eventData.getClickCount==2 
+        this.apply()
+      end
+      
+    end     
+
 
     function closingFcn(~,~)
       
@@ -104,6 +73,20 @@ classdef mda < handle
       delete(gcf);
       
     end
+    
+    function[] = drawROI(position)
+
+      hold on
+      n = size(position,1);
+      for i = 1:n-1
+        line([position(i,1), position(i+1,1)],[position(i,2), position(i+1,2)],'Color',[1 0 0])
+      end
+      line([position(1,1), position(n,1)],[position(1,2), position(n,2)],'Color',[1 0 0]) 
+      hold off
+
+    end
+    
+
   
   end
   

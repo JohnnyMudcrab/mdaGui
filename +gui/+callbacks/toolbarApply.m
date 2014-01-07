@@ -20,6 +20,10 @@ function [] = toolbarApply(this)
     return
   end
   
+  %% save current Node
+  hMda = getappdata(0,'hMda');
+  hMda.currentNode = selectedNodes{1};
+  
   
   %% get file location
   file = selectedNodes{1}.handle.UserData.string;
@@ -29,6 +33,9 @@ function [] = toolbarApply(this)
   %% show picture in axes
   info = imfinfo([path file]); 
   img = imread([path file],'Index',1,'Info',info); 
+  
+  axes(this.getHandle('axesTrack'))
+  imshow(double(img) / 255) 
   
   axes(this.getHandle('axesLocate'))
   imshow(double(img) / 255) 
@@ -79,6 +86,14 @@ function [] = toolbarApply(this)
   set(this.getHandle('sliderLocate'), 'Min', 1, 'Max', numel(info), 'SliderStep', sliderStep, 'Value', 1)
   set(this.getHandle('buttonLocateApply'), 'Enable', 'on')
   set(this.getHandle('buttonLocateApplyAll'), 'Enable', 'on')
+  
+  %% enable track
+  set(this.getHandle('textTrackFrame'), 'String', ['1 / ' num2str(numel(info))])
+  set(this.getHandle('sliderTrack'), 'Enable', 'On');
+  
+  sliderStep = [1 10] / (numel(info) - 1);
+  set(this.getHandle('sliderTrack'), 'Min', 1, 'Max', numel(info), 'SliderStep', sliderStep, 'Value', 1)
+  set(this.getHandle('buttonTrack'), 'Enable', 'on')
     
   
   %% set status to ready

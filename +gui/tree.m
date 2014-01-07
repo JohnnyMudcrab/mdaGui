@@ -1,6 +1,6 @@
 classdef tree < handle
   
-  properties(Access = private)
+  properties(Access = public)
     
     handle
     root

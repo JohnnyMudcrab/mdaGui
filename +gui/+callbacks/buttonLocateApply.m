@@ -7,7 +7,14 @@ function buttonLocateApply(this)
   
   img = imread(path,'Index',index);
   
-  gConfs = locateParticles2D(img, []); 
+  hMda = getappdata(0, 'hMda');
+  data = hMda.currentNode.handle.UserData;
+  
+  if(isfield(data,'mask'))
+    gConfs = locateParticles2D(img, data.mask.bw); 
+  else
+    gConfs = locateParticles2D(img, []); 
+  end
   
   % gConfs(7) = x; gConfs(8) = y
   axes(this.getHandle('axesLocate'))
@@ -21,6 +28,10 @@ function buttonLocateApply(this)
   end
 
   hold off
+
+  if(isfield(data,'mask'))
+    hMda.drawROI(data.mask.position)
+  end
   
   this.changeStatus('statusMain', 'Ready...');
   
