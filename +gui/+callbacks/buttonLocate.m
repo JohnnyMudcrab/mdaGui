@@ -1,6 +1,6 @@
-function buttonLocateApplyAll(this)
-
-  this.changeStatus('statusMain', 'Busy...');
+function buttonLocate(this)
+  
+this.changeStatus('statusMain', 'Busy...');
   %this.disableGui();
 
   hMda = getappdata(0, 'hMda');
@@ -8,6 +8,6 @@ function buttonLocateApplyAll(this)
   
   %this.enableGui();
   this.changeStatus('statusMain', 'Ready...');
-
+  
 end
 

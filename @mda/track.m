@@ -34,10 +34,13 @@ function track(this, overwrite)
         gConfs{j}(:,1:6) = [];
       end
     end
+    
+    maxDist = this.gui.getText('textTrackMaxDisp2', 'numeric');
+    maxLost = this.gui.getText('textTrackMaxLost2', 'numeric');
 
     [tracks, adjacency_tracks] = simpletracker(gConfs,...
-      'MaxLinkingDistance', 4, ...
-      'MaxGapClosing', 4);
+      'MaxLinkingDistance', maxDist, ...
+      'MaxGapClosing', maxLost);
 
 
     n_tracks = numel(tracks);

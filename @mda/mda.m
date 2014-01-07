@@ -31,6 +31,11 @@ classdef mda < handle
       set(this.gui.getHandle('buttonLocateApplyAll'), 'Enable', 'Off')
       set(this.gui.getHandle('buttonTrack'), 'Enable', 'Off')
       
+      % text format
+      set(this.gui.getHandle('textLocateState'), 'FontWeight', 'bold', 'ForegroundColor', [1 0 0])
+      set(this.gui.getHandle('textTrackState'), 'FontWeight', 'bold', 'ForegroundColor', [1 0 0])
+      set(this.gui.getHandle('textCalibrateState'), 'FontWeight', 'bold', 'ForegroundColor', [1 0 0])
+      
       % set mouseclick action for hTree
       hTree = this.gui.getHandle('treeMain');
       jTree = handle(hTree.handle.getTree,'CallbackProperties');
@@ -40,6 +45,8 @@ classdef mda < handle
 
     
     apply(this)
+    
+    calibrate(this)
     
     locate(this, overwrite)
     

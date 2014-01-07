@@ -1,4 +1,4 @@
-function buttonLocateApply(this)
+function buttonPreview(this)
 
   this.changeStatus('statusMain', 'Busy...');
   
