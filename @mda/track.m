@@ -50,6 +50,11 @@ function track(this, overwrite)
     iterator = 1;
 
     for j = 1:1:n_tracks
+      
+        if(this.stop)
+          this.stop = false;
+          return;
+        end
 
         o = size(tracks{j},1);
 
@@ -70,6 +75,7 @@ function track(this, overwrite)
         end
 
       iterator = 1;
+      pause(0.05)
 
     end
 

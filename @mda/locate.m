@@ -43,8 +43,20 @@ function locate(this, overwrite)
         drawnow
 
         img = imread(filename,'Index',j,'Info',info); 
+        
+        if(isfield(data,'mask'))
+          mask = data.mask;
+        else
+          mask = [];
+        end
 
-        gConfs = locateParticles2D(img, []); 
+        gConfs = locateInvoker(img, ...
+                               this.gui.getText('textLocateTreshold2', 'numeric'), ...
+                               this.gui.getText('textLocatePixelSizeX', 'numeric'), ...
+                               this.gui.getText('textLocatePixelSizeY', 'numeric'), ...
+                               this.gui.getText('textLocateFWHMmin', 'numeric'), ...
+                               this.gui.getText('textLocateFWHMmax', 'numeric'), ...
+                               mask); 
 
         data.locate{j,1} = gConfs;
 

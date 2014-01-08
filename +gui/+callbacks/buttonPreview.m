@@ -2,6 +2,11 @@ function buttonPreview(this)
 
   this.changeStatus('statusMain', 'Busy...');
   
+  % disable gui while busy
+  this.disableGui();
+  set(this.getHandle('menuStop'), 'enable', 'on')
+  
+  % locate particles in current picture
   path = this.getText('textInfoName2');
   index = int32(get(this.getHandle('sliderLocate'), 'Value'));
   
@@ -32,6 +37,10 @@ function buttonPreview(this)
   if(isfield(data,'mask'))
     hMda.drawROI(data.mask.position)
   end
+  
+  
+  % enable gui again
+  this.enableGui();
   
   this.changeStatus('statusMain', 'Ready...');
   

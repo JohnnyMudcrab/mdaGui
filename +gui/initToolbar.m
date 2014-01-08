@@ -5,12 +5,12 @@ function initToolbar(this)
 
   hToolbar = findall(gcf,'tag','FigureToolBar');
 
-  load('+gui/icon.mat')
-  load('+gui/icon2.mat')
-  uipushtool(hToolbar,'CData',icon, 'Enable', 'on', 'ClickedCallback', @(src,event)gui.callbacks.toolbarApply(this))
-  uipushtool(hToolbar,'CData',icon2, 'Enable', 'on', 'ClickedCallback', @(src,event)gui.callbacks.toolbarStop(this))
+%   load('+gui/icon.mat')
+%   load('+gui/icon2.mat')
+%   uipushtool(hToolbar,'CData',icon, 'Enable', 'on', 'ClickedCallback', @(src,event)gui.callbacks.toolbarApply(this))
+%   uipushtool(hToolbar,'CData',icon2, 'Enable', 'on', 'ClickedCallback', @(src,event)gui.callbacks.toolbarStop(this))
   
-  for i = 1:25
+  for i = 1:27
     uipushtool(hToolbar,'CData',[], 'Enable', 'off')
   end
 
@@ -32,5 +32,8 @@ function initToolbar(this)
   oldOrder = allchild(hToolbar);
   newOrder = [oldOrder(28:end); oldOrder(1:27)];
   set(hToolbar,'Children',newOrder);
+
+%   setappdata(this.hMainWindow, 'hToolbar', hToolbar);
+%   this.handles{numel(this.handles) + 1} = 'hToolbar';
 
 end
