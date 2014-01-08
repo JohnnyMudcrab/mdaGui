@@ -12,7 +12,7 @@ function sliderInfo(this)
   % show picture in axes
   axes(this.getHandle('axesInfo'))
   img = imread(path,'Index',index); 
-  imshow(double(img) / 255) 
+  imshow(img, []) 
   
 end
 

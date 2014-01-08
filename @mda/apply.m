@@ -50,26 +50,6 @@ function apply(this)
   set(this.gui.getHandle('textInfoBit2'), 'String', [num2str(info(1,1).BitDepth) ' Bit'])
   
   
-  % update state
-  if ~isempty(selectedNodes{1}.handle.UserData.locate)
-    set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Located')
-  else
-    set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Not Located Yet')
-  end
-  
-  if ~isempty(selectedNodes{1}.handle.UserData.locate)
-    set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Tracked')
-  else
-    set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Not Tracked Yet')
-  end
-  
-  if ~isempty(selectedNodes{1}.handle.UserData.locate)
-    set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Calibrated')
-  else
-    set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Not Calibrated Yet')
-  end
-  
-  
   % update slider
   set(this.gui.getHandle('textInfoFrame'), 'String', ['1 / ' num2str(numel(info))])
   sliderStep = [1 10] / (numel(info) - 1);
@@ -82,8 +62,12 @@ function apply(this)
   set(this.gui.getHandle('textTrackFrame'), 'String', ['1 / ' num2str(numel(info))])
   sliderStep = [1 10] / (numel(info) - 1);
   set(this.gui.getHandle('sliderTrack'), 'Min', 1, 'Max', numel(info), 'SliderStep', sliderStep, 'Value', 1)
-
   
+  
+  % update state
+  this.update()
+
+
   % enable buttons
   set(this.gui.getHandle('buttonPreview'), 'Enable', 'On')
   set(this.gui.getHandle('buttonLocate'), 'Enable', 'On')

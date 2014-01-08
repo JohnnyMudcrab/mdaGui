@@ -46,6 +46,59 @@ classdef mda < handle
       jTree = handle(hTree.handle.getTree,'CallbackProperties');
       set(jTree, 'MousePressedCallback', @this.mousePressedCallback);    
       
+      % listbox
+      hListbox = this.gui.getHandle('listCalibrate');
+      set(hListbox, 'Min', 1, 'Max', 5);
+      set(hListbox, 'Callback', @(src, event)gui.callbacks.listboxCalibrate(this));
+      
+      
+    end
+    
+    function update(this)
+      
+      data = this.currentNode.handle.UserData;
+      
+      % update state
+      if ~isempty(data.locate)
+        set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Located')
+        set(this.gui.getHandle('textLocateState'), 'String', 'Located', 'ForegroundColor', [0 1 0])
+      else
+        set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Not Located Yet')
+        set(this.gui.getHandle('textLocateState'), 'String', 'Not Located', 'ForegroundColor', [1 0 0])
+      end
+
+      if ~isempty(data.track)
+        set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Tracked')
+        set(this.gui.getHandle('textLocateTrack'), 'String', 'Tracked', 'ForegroundColor', [0 1 0])
+      else
+        set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Not Tracked Yet')
+        set(this.gui.getHandle('textTrackState'), 'String', 'Not Tracked', 'ForegroundColor', [1 0 0])
+      end
+      
+      if ~isempty(data.calibrate)
+        set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Calibrated')
+        set(this.gui.getHandle('textCalibrateState'), 'String', 'Calibrated', 'ForegroundColor', [0 1 0])
+      else
+        set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Not Calibrated Yet')
+        set(this.gui.getHandle('textCalibrateState'), 'String', 'Not Calibrated', 'ForegroundColor', [1 0 0])
+      end
+      
+      % update calibrate list
+      hListbox = this.gui.getHandle('listCalibrate');
+      data = sortrows(data.calibrate,-5);
+      
+      n = size(data,1);
+      
+      list = cell(n,1);
+      
+      for i = 1:n
+        
+        list{i} = ['Track ID ' num2str(data{i,4}) ' (' num2str(data{i,5}) ')'];
+        
+      end
+      
+      set(hListbox, 'String', list);
+    
     end
 
     

@@ -224,30 +224,32 @@ classdef tree < handle
 
           % load file
           load([path file]);
-        end
         
-        % check if it is a tree file
-        if ismember('treeKey',who) 
+        
+          % check if it is a tree file
+          if ismember('treeKey',who) 
 
-          this.root.removeAllChildren;
+            this.root.removeAllChildren;
 
-          n = size(saveList,1); %#ok<USENS>
+            n = size(saveList,1); %#ok<USENS>
 
-          % loop over tree
-          for i = 1:1:n
-            result = strfind(saveList{i,1},'/');
-            file = saveList{i,1}(result(end) + 1: size(saveList{i,1},2));
-            path = saveList{i,1}(1:result(end));
-            userData = saveList{i,2};
+            % loop over tree
+            for i = 1:1:n
+              result = strfind(saveList{i,1},'/');
+              file = saveList{i,1}(result(end) + 1: size(saveList{i,1},2));
+              path = saveList{i,1}(1:result(end));
+              userData = saveList{i,2};
 
-            this.add(path, false, [], 'Workspace');
-            this.add(file, true, userData, path);
-            
+              this.add(path, false, [], 'Workspace');
+              this.add(file, true, userData, path);
+
+            end
+
+            this.reloadTree();
+          else
+             warndlg('Not a tree file');
           end
-
-          this.reloadTree();
-        else
-           warndlg('Not a tree file');
+        
         end
 
       
