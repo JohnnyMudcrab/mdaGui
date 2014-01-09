@@ -34,13 +34,13 @@ function apply(this)
   img = imread([path file],'Index',1,'Info',info); 
   
   axes(this.gui.getHandle('axesTrack'))
-  imshow(double(img) / 255) 
+  imshow(img, [this.gui.getText('textInfoHistMin', 'numeric') this.gui.getText('textInfoHistMax', 'numeric')]) 
   
   axes(this.gui.getHandle('axesLocate'))
-  imshow(double(img) / 255) 
+  imshow(img, [this.gui.getText('textInfoHistMin', 'numeric') this.gui.getText('textInfoHistMax', 'numeric')]) 
   
   axes(this.gui.getHandle('axesInfo'))
-  imshow(double(img) / 255)
+  imshow(img, [this.gui.getText('textInfoHistMin', 'numeric') this.gui.getText('textInfoHistMax', 'numeric')]) 
     
   
   % update info panel

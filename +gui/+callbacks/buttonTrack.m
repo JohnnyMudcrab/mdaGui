@@ -5,9 +5,17 @@ function buttonTrack(this)
   set(this.getHandle('menuStop'), 'enable', 'on')
 
   hMda = getappdata(0, 'hMda');
-  hMda.track(true);
+  
+  try
+    hMda.track(true);
+  catch exc
+    msgbox(getReport(exc), 'ERROR', 'error')
+  end
+  
+  hMda.update
   
   this.enableGui();
+  
   this.changeStatus('statusMain', 'Ready...');
   
 end

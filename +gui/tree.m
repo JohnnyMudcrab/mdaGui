@@ -201,7 +201,9 @@ classdef tree < handle
         end
 
         treeKey = 1; %#ok<NASGU>
-        save([path file], 'saveList','treeKey')
+        hMda = getappdata(0, 'hMda');
+        conf = hMda.getConf(); %#ok<NASGU>
+        save([path file], 'saveList','treeKey','conf')
         
       end
       
@@ -249,6 +251,9 @@ classdef tree < handle
           else
              warndlg('Not a tree file');
           end
+          
+          hMda = getappdata(0, 'hMda');
+          hMda.setConf(conf);
         
         end
 

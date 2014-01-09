@@ -14,7 +14,7 @@ function sliderTrack(this)
   % show picture in axes
   axes(this.getHandle('axesTrack'))
   img = imread(path,'Index',index); 
-  imshow(double(img) / 255) 
+  imshow(img, [this.getText('textInfoHistMin', 'numeric') this.getText('textInfoHistMax', 'numeric')]) 
   
   data = hMda.currentNode.handle.UserData;
   

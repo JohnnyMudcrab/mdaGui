@@ -13,7 +13,7 @@ function track(this, overwrite)
   this.locate(false);
 
 
-  %% Loop over unique Nodes
+  % Loop over Nodes
   
   n = numel(selectedNodes);
 
@@ -24,67 +24,74 @@ function track(this, overwrite)
 
     data = selectedNodes{i}.handle.UserData;
 
-
-    % Connect Particles
-    gConfs = data.locate;
-    m = size(gConfs,1);
-
-    for j = 1:1:m
-      if ~isempty(gConfs{j})
-        gConfs{j}(:,1:6) = [];
-      end
-    end
-    
-    maxDist = this.gui.getText('textTrackMaxDisp2', 'numeric');
-    maxLost = this.gui.getText('textTrackMaxLost2', 'numeric');
-
-    [tracks, adjacency_tracks] = simpletracker(gConfs,...
-      'MaxLinkingDistance', maxDist, ...
-      'MaxGapClosing', maxLost);
-
-
-    n_tracks = numel(tracks);
-
-    frames = cell(m,1);
-    trajectories = cell(n_tracks,1);
-    iterator = 1;
-
-    for j = 1:1:n_tracks
+    if isempty(data.track) || overwrite
       
-        if(this.stop)
-          this.stop = false;
-          return;
+      % Connect Particles
+      gConfs = data.locate;
+      m = size(gConfs,1);
+
+      for j = 1:1:m
+        if ~isempty(gConfs{j})
+          gConfs{j}(:,1:6) = [];
         end
+      end
 
-        o = size(tracks{j},1);
+      maxDist = this.gui.getText('textTrackMaxDisp2', 'numeric');
+      maxLost = this.gui.getText('textTrackMaxLost2', 'numeric');
 
-        trajectories{j,2} = j;
-        trajectories{j,3} =  numel(tracks{j}) - sum(isnan(tracks{j}));
+      [tracks, adjacency_tracks] = bin.simpletracker(gConfs,...
+        'MaxLinkingDistance', maxDist, ...
+        'MaxGapClosing', maxLost);
 
-        for k = 1:1:o
-          
-          if ~isnan(tracks{j}(k))
-            frames{k,1}(size(frames{k,1},1)+1,1) = j;
-            frames{k,1}(size(frames{k,1},1),2:9) = data.locate{k,1}(tracks{j}(k),1:8);
 
-            trajectories{j,1}{iterator,1} = data.locate{k,1}(tracks{j}(k),1:8);
-            trajectories{j,1}{iterator,2} = k;
-            iterator = iterator + 1;
+      n_tracks = numel(tracks);
+
+      frames = cell(m,1);
+      trajectories = cell(n_tracks,1);
+      iterator = 1;
+
+      for j = 1:1:n_tracks
+
+          if(this.stop)
+            this.stop = false;
+            return;
           end
           
-        end
+          this.gui.changeStatus('statusMain', ['Busy...Tracking Image ' num2str(i) ' of ' num2str(n) ...
+            ', Track ' num2str(j) ' of ' num2str(n_tracks)]);
+          drawnow
 
-      iterator = 1;
-      pause(0.05)
+          o = size(tracks{j},1);
 
+          trajectories{j,2} = j;
+          trajectories{j,3} =  numel(tracks{j}) - sum(isnan(tracks{j}));
+
+          for k = 1:1:o
+
+            if ~isnan(tracks{j}(k))
+              frames{k,1}(size(frames{k,1},1)+1,1) = j;
+              frames{k,1}(size(frames{k,1},1),2:9) = data.locate{k,1}(tracks{j}(k),1:8);
+
+              trajectories{j,1}{iterator,1} = data.locate{k,1}(tracks{j}(k),1:8);
+              trajectories{j,1}{iterator,2} = k;
+              iterator = iterator + 1;
+            end
+
+          end
+
+        iterator = 1;
+        pause(0.05)
+
+      end
+
+      data.track = [];
+
+      data.track.frames = frames;
+      data.track.trajectories = trajectories;
+
+      selectedNodes{i}.handle.UserData = data;    
+      
     end
-
-    data.track = [];
-
-    data.track.frames = frames;
-    data.track.trajectories = trajectories;
-    
-    selectedNodes{i}.handle.UserData = data;    
 
   end 
 

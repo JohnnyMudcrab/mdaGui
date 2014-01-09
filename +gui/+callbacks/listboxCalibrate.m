@@ -25,7 +25,7 @@ function listboxCalibrate(this)
           
           track = cell2mat(data{index2, 1});
           
-          if size(track,2) > 8
+          if size(track,2) > 9
             plot3(track(:,7) .* 133, track(:,8) .* 133,track(:,11));
 
             view(3)

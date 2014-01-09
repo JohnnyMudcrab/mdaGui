@@ -6,7 +6,14 @@ function buttonLocate(this)
   set(this.getHandle('menuStop'), 'enable', 'on')
 
   hMda = getappdata(0, 'hMda');
-  hMda.locate(true);
+  
+  try
+    hMda.locate(true);
+  catch exc
+    msgbox(getReport(exc), 'ERROR', 'error')
+  end
+  
+  hMda.update
   
   this.enableGui();
   

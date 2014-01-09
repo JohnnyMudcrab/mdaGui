@@ -12,7 +12,7 @@ function sliderInfo(this)
   % show picture in axes
   axes(this.getHandle('axesInfo'))
   img = imread(path,'Index',index); 
-  imshow(img, []) 
+  imshow(img, [this.getText('textInfoHistMin', 'numeric') this.getText('textInfoHistMax', 'numeric')]) 
   
 end
 

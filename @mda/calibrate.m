@@ -2,9 +2,15 @@ function calibrate(this)
   
   hTree = this.gui.getHandle('treeMain');
   [selectedNodes, ~, ~] = hTree.getSelectedNodes();
+  
+  if isempty(selectedNodes)
+    msgbox('No Image selected','No Image','Help')
+    return
+  end
+  
+  this.locate(false);
+  this.track(false);
 
-
-  minTrack    = this.gui.getText('textTrackMinTrack2', 'numeric');
   voxelSize   = [this.gui.getText('textLocatePixelSizeX', 'numeric'),...
                this.gui.getText('textLocatePixelSizeY', 'numeric'),1];     
   fwhm_offset = this.gui.getText('textCalibrateFWHM', 'numeric');
@@ -28,6 +34,8 @@ function calibrate(this)
       this.stop = false;
       return;
     end
+    
+    this.gui.changeStatus('statusMain', ['Busy...Calibrating Image ' num2str(i) ' of ' num2str(n)]);
 
     data = selectedNodes{i}.handle.UserData;
 
@@ -63,7 +71,7 @@ function calibrate(this)
     for j = 1:1:m
       
       this.gui.changeStatus('statusMain', ['Busy...Calibrating Image ' num2str(i) ' of ' num2str(n) ...
-                            ', Trajectorie ' num2str(j) ' of ' num2str(m)]);
+                            ', Track ' num2str(j) ' of ' num2str(m)]);
 
       if(this.stop)
         this.stop = false;

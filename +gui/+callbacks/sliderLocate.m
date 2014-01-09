@@ -14,7 +14,7 @@ function sliderLocate(this)
   % show picture in axes
   axes(this.getHandle('axesLocate'))
   img = imread(path,'Index',index); 
-  imshow(img, []) 
+  imshow(img, [this.getText('textInfoHistMin', 'numeric') this.getText('textInfoHistMax', 'numeric')]) 
   
   data = hMda.currentNode.handle.UserData;
   
