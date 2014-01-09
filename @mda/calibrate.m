@@ -58,7 +58,7 @@ function calibrate(this)
         control = {};
       else
         [~, fwhmConfX, fwhmConfY, success, control] = ...
-          bin.calibrateInvoker(combined_p, FWHMmin, FWHMmax, fwhmConfX, fwhmConfY, lens_shift, voxelSize, 1);
+          bin.calibrateInvoker(combined_p, FWHMmin, FWHMmax, fwhmConfX, fwhmConfY, lens_shift, voxelSize, 1, 0);
 
       end
       
@@ -80,7 +80,7 @@ function calibrate(this)
 
       if(~individualCalibration && success >= 0)
         [p_current, fwhmConfX, fwhmConfY, ~, control] = ...
-          bin.calibrateInvoker(data.track.trajectories{j}, FWHMmin, FWHMmax, fwhmConfX, fwhmConfY, lens_shift, voxelSize, 0);
+          bin.calibrateInvoker(data.track.trajectories{j}, FWHMmin, FWHMmax, fwhmConfX, fwhmConfY, lens_shift, voxelSize, 0, 1);
       else
         if (~individualCalibration && success == -1)
           p_current = data.track.trajectories{j};
@@ -89,7 +89,7 @@ function calibrate(this)
 
       if(individualCalibration)
         [p_current, fwhmConfX, fwhmConfY, ~, control] = ...
-          bin.calibrateInvoker(data.track.trajectories{j}, FWHMmin, FWHMmax, fwhmConfX, fwhmConfY, lens_shift, voxelSize, 1);
+          bin.calibrateInvoker(data.track.trajectories{j}, FWHMmin, FWHMmax, fwhmConfX, fwhmConfY, lens_shift, voxelSize, 1, 1);
       end
 
       p{j,1} = p_current;

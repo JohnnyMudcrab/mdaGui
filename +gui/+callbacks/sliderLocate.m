@@ -13,6 +13,7 @@ function sliderLocate(this)
   
   % show picture in axes
   axes(this.getHandle('axesLocate'))
+  set(this.getHandle('axesLocate'), 'Nextplot','replacechildren')
   img = imread(path,'Index',index); 
   imshow(img, [this.getText('textInfoHistMin', 'numeric') this.getText('textInfoHistMax', 'numeric')]) 
   

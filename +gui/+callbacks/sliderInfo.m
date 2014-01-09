@@ -11,6 +11,7 @@ function sliderInfo(this)
   
   % show picture in axes
   axes(this.getHandle('axesInfo'))
+  set(this.getHandle('axesInfo'), 'Nextplot','replacechildren')
   img = imread(path,'Index',index); 
   imshow(img, [this.getText('textInfoHistMin', 'numeric') this.getText('textInfoHistMax', 'numeric')]) 
   
