@@ -55,7 +55,7 @@ classdef mda < handle
       % axes
       set(findobj(gcf, 'type','axes'), 'XTick',[])
       set(findobj(gcf, 'type','axes'), 'YTick',[])
-      
+     
       
       
     end

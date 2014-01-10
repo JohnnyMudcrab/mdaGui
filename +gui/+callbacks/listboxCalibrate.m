@@ -31,7 +31,7 @@ function listboxCalibrate(this)
             view(3)
             %daspect([1,1,1])
           else
-            waitfor(msgbox(['Track ' num2str(data{1,4}) ' failed to calibrate'],...
+            waitfor(msgbox(['Track ' num2str(data{index2,4}) ' failed to calibrate'],...
                        'ERROR','error'));
           end
           

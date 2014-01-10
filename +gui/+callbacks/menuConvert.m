@@ -11,6 +11,8 @@ function menuConvert(this)
                    'ERROR','error')); 
        return; 
     end 
+    
+    hMda = getappdata(0, 'hMda');
 
     % load file
     load([path file]);
@@ -28,14 +30,15 @@ function menuConvert(this)
       data.calibrate = saveList{i,2}.calibrate;
       data.mask = saveList{i,2}.mask;
       data.string = [path file];
-      
-      
+
       saveList{i,2} = data;
       
     end
     
+    conf = hMda.getConf();
+    
     [file, path] = uiputfile;
-    save([path file], 'saveList','treeKey')
+    save([path file], 'saveList','treeKey', 'conf')
   
     
   end

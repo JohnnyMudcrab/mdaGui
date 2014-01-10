@@ -70,6 +70,7 @@ function calibrate(this)
 
     for j = 1:1:m
       
+      
       this.gui.changeStatus('statusMain', ['Busy...Calibrating Image ' num2str(i) ' of ' num2str(n) ...
                             ', Track ' num2str(j) ' of ' num2str(m)]);
 
@@ -103,11 +104,15 @@ function calibrate(this)
       else
         p{j,6} = {};
       end
+      
+      pause(0.05)
 
     end
 
     data.calibrate = p;
     selectedNodes{i}.handle.UserData = data;
+    
+    
 
   end
 
