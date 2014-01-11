@@ -27,6 +27,16 @@ function listboxCalibrate(this)
           
           if size(track,2) > 9
             plot3(track(:,7) .* 133, track(:,8) .* 133,track(:,11));
+            
+            
+            if this.gui.getValue('checkboxLabel')
+              x = mean(track(:,7) .* 133);
+              y = mean(track(:,8) .* 133);
+              z = mean(track(:,11));
+
+              text(x, y, z, num2str(data{index2,4}), 'Color', 'k','EdgeColor', 'r', ...
+                'BackgroundColor',[.7 .9 .7], 'FontSize', 50)
+            end
 
             view(3)
             %daspect([1,1,1])
