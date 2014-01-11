@@ -31,15 +31,31 @@ function sliderTrack(this)
     for i = 1:size(data.locate{index},1)
 %       rectangle('Position',[data.locate{index}(i,7) - 10,data.locate{index}(i,8) - 10,20,20],...
 %                 'Curvature',[1,1],'EdgeColor','r')
+
+      if size(data.track.frames{index},2) == 10
+          
+            if data.track.frames{index}(i,10) == 0
+              color = 'g';
+            else
+              if data.track.frames{index}(i,10) == 1
+                color = 'c';
+              else
+                color = 'y';
+              end
+            end
+            
+          else
+            color = 'g';
+      end
               
-      drawGaussian([data.locate{index}(i,7), data.locate{index}(i,8), ...
-              2 * data.locate{index}(i,3) / 2.3548200450309, ...
-              2 * data.locate{index}(i,4) / 2.3548200450309, ...
-              0], 'g');
+      drawGaussian([data.track.frames{index}(i,8), data.track.frames{index}(i,9), ...
+              2 * data.track.frames{index}(i,4) / 2.3548200450309, ...
+              2 * data.track.frames{index}(i,5) / 2.3548200450309, ...
+              0], color);
               
       if ~isempty(data.track)
         text(data.track.frames{index}(i,8),data.track.frames{index}(i,9) - 5, ...
-             num2str(data.track.frames{index}(i,1)), 'Color', [1 0 0])
+             num2str(data.track.frames{index}(i,1)), 'Color', 'r')
       end
       
     end

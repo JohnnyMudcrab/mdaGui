@@ -207,6 +207,8 @@ classdef mda < handle
 
     end
     
+    data = splitAndMerge(data, minTrack, maxDisp)
+    
 
   
   end

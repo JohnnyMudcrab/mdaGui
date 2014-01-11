@@ -36,11 +36,12 @@ function track(this, overwrite)
         end
       end
 
-      maxDist = this.gui.getText('textTrackMaxDisp2', 'numeric');
+      minTrack = this.gui.getText('textTrackMinTrack2', 'numeric');
+      maxDisp = this.gui.getText('textTrackMaxDisp2', 'numeric');
       maxLost = this.gui.getText('textTrackMaxLost2', 'numeric');
 
       [tracks, adjacency_tracks] = bin.simpletracker(gConfs,...
-        'MaxLinkingDistance', maxDist, ...
+        'MaxLinkingDistance', maxDisp, ...
         'MaxGapClosing', maxLost);
 
 
@@ -89,7 +90,11 @@ function track(this, overwrite)
       data.track.frames = frames;
       data.track.trajectories = trajectories;
 
-      selectedNodes{i}.handle.UserData = data;    
+      if this.gui.getValue('checkboxSplit')
+        selectedNodes{i}.handle.UserData = this.splitAndMerge(data, minTrack, maxDisp);  
+      else
+        selectedNodes{i}.handle.UserData = data;  
+      end
       
     end
 
