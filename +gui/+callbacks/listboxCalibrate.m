@@ -23,7 +23,7 @@ function listboxCalibrate(this)
           C = textscan(string, '%s');
           index2 = cell2mat(data(:,4)) == str2double(C{1}{3});        
           
-          track = cell2mat(data{index2, 1});
+          track = cell2mat(data{index2, 1}(:,1));
           
           if size(track,2) > 9
             plot3(track(:,7) .* 133, track(:,8) .* 133,track(:,11));
