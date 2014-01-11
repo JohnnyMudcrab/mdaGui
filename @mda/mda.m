@@ -200,9 +200,9 @@ classdef mda < handle
       hold on
       n = size(position,1);
       for i = 1:n-1
-        line([position(i,1), position(i+1,1)],[position(i,2), position(i+1,2)],'Color',[1 0 0])
+        line([position(i,1), position(i+1,1)],[position(i,2), position(i+1,2)],'Color',[0 0 1])
       end
-      line([position(1,1), position(n,1)],[position(1,2), position(n,2)],'Color',[1 0 0]) 
+      line([position(1,1), position(n,1)],[position(1,2), position(n,2)],'Color',[0 0 1]) 
       hold off
 
     end

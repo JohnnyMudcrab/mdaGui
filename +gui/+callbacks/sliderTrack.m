@@ -29,11 +29,17 @@ function sliderTrack(this)
     
     hold on
     for i = 1:size(data.locate{index},1)
-      rectangle('Position',[data.locate{index}(i,7) - 10,data.locate{index}(i,8) - 10,20,20],...
-                'Curvature',[1,1],'EdgeColor','r')
+%       rectangle('Position',[data.locate{index}(i,7) - 10,data.locate{index}(i,8) - 10,20,20],...
+%                 'Curvature',[1,1],'EdgeColor','r')
+              
+      drawGaussian([data.locate{index}(i,7), data.locate{index}(i,8), ...
+              2 * data.locate{index}(i,3) / 2.3548200450309, ...
+              2 * data.locate{index}(i,4) / 2.3548200450309, ...
+              0], 'g');
               
       if ~isempty(data.track)
-        text(data.track.frames{index}(i,8),data.track.frames{index}(i,9) - 5,num2str(data.track.frames{index}(i,1)))
+        text(data.track.frames{index}(i,8),data.track.frames{index}(i,9) - 5, ...
+             num2str(data.track.frames{index}(i,1)), 'Color', [1 0 0])
       end
       
     end
