@@ -80,6 +80,10 @@ function apply(this)
   set(this.gui.getHandle('sliderInfo'), 'Enable', 'On')
   set(this.gui.getHandle('sliderLocate'), 'Enable', 'On')
   set(this.gui.getHandle('sliderTrack'), 'Enable', 'On')
+  
+  % enable text
+  set(this.gui.getHandle('textInfoHistMin'), 'Enable', 'On')
+  set(this.gui.getHandle('textInfoHistMax'), 'Enable', 'On')
     
   % set status to ready
   this.gui.changeStatus('statusMain', 'Ready...');

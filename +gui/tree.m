@@ -92,6 +92,8 @@ classdef tree < handle
       
       % check if empty
       if isempty(selectedNodes)
+        selectedNodes = [];
+        filenames = [];
         error = 1;
         return
       end
@@ -118,30 +120,32 @@ classdef tree < handle
       count   = 0;
 
       for i = 1:1:n
-        level = selectedNodes(1).getLevel;
+        level = selectedNodes(i).getLevel;
         if level == 0
-          tempParent = selectedNodes(1).getFirstChild;
-          while(~isempty(tempParent))
-            tempChild = tempParent.getFirstChild;
-            while(~isempty(tempChild))
-              count = count + 1;
-              nodes{count,1} = tempChild;
-              filenames{count,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
-              tempChild = tempParent.getChildAfter(tempChild);
+          if selectedNodes(i).getChildCount
+            tempParent = selectedNodes(i).getFirstChild;
+            while(~isempty(tempParent))
+              tempChild = tempParent.getFirstChild;
+              while(~isempty(tempChild))
+                count = count + 1;
+                nodes{count,1} = tempChild;
+                filenames{count,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
+                tempChild = tempParent.getChildAfter(tempChild);
+              end
+              tempParent = selectedNodes(i).getChildAfter(tempParent);
             end
-            tempParent = selectedNodes(1).getChildAfter(tempParent);
           end
         elseif level == 1
-          tempChild = selectedNodes(1).getFirstChild;
+          tempChild = selectedNodes(i).getFirstChild;
           while(~isempty(tempChild))
             tempParent = tempChild.getParent;
             count = count + 1;
             nodes{count,1} = tempChild;
             filenames{count,1} = [char(tempParent.handle.UserData.string) char(tempChild.handle.UserData.string)];
-            tempChild = selectedNodes(1).getChildAfter(tempChild);
+            tempChild = selectedNodes(i).getChildAfter(tempChild);
           end
         else
-           tempChild = selectedNodes(1);
+           tempChild = selectedNodes(i);
            tempParent = tempChild.getParent;
            count = count + 1;
            nodes{count,1} = tempChild;

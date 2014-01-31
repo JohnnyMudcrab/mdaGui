@@ -16,10 +16,18 @@ function buttonPreview(this)
   data = hMda.currentNode.handle.UserData;
   
   if(isfield(data,'mask'))
-    gConfs = locateParticles2D(img, data.mask.bw); 
+      mask = data.mask.bw;
   else
-    gConfs = locateParticles2D(img, []); 
+      mask = [];
   end
+
+  gConfs = bin.locateInvoker(img, ...
+                         this.gui.getText('textLocateTreshold2', 'numeric'), ...
+                         this.gui.getText('textLocatePixelSizeX', 'numeric'), ...
+                         this.gui.getText('textLocatePixelSizeY', 'numeric'), ...
+                         this.gui.getText('textLocateFWHMmin', 'numeric'), ...
+                         this.gui.getText('textLocateFWHMmax', 'numeric'), ...
+                         mask);
   
   % gConfs(7) = x; gConfs(8) = y
   axes(this.getHandle('axesLocate'))

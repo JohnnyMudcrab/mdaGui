@@ -29,17 +29,25 @@ classdef mda < handle
       
       % disable button
       set(this.gui.getHandle('buttonPreview'), 'Enable', 'Off')
-      set(this.gui.getHandle('buttonLocate'), 'Enable', 'Off')
+      %set(this.gui.getHandle('buttonLocate'), 'Enable', 'Off')
       set(this.gui.getHandle('buttonCreateMask'), 'Enable', 'Off')
       set(this.gui.getHandle('buttonDeleteMask'), 'Enable', 'Off')
-      set(this.gui.getHandle('buttonTrack'), 'Enable', 'Off')
-      set(this.gui.getHandle('buttonCalibrate'), 'Enable', 'Off')
+      %set(this.gui.getHandle('buttonTrack'), 'Enable', 'Off')
+      %set(this.gui.getHandle('buttonCalibrate'), 'Enable', 'Off')
       set(this.gui.getHandle('menuStop'), 'Enable', 'Off')
+      
+      % disable edit text
+      set(this.gui.getHandle('textInfoHistMin'), 'Enable', 'Off')
+      set(this.gui.getHandle('textInfoHistMax'), 'Enable', 'Off')
       
       % text format
       set(this.gui.getHandle('textLocateState'), 'FontWeight', 'bold', 'ForegroundColor', [1 0 0])
       set(this.gui.getHandle('textTrackState'), 'FontWeight', 'bold', 'ForegroundColor', [1 0 0])
       set(this.gui.getHandle('textCalibrateState'), 'FontWeight', 'bold', 'ForegroundColor', [1 0 0])
+      
+      % set callbacks
+      set(this.gui.getHandle('textInfoHistMin'), 'Callback', @(src, event)gui.callbacks.editHistMin(this));
+      set(this.gui.getHandle('textInfoHistMax'), 'Callback', @(src, event)gui.callbacks.editHistMax(this));
       
       % set mouseclick action for hTree
       hTree = this.gui.getHandle('treeMain');
@@ -55,6 +63,8 @@ classdef mda < handle
       % axes
       set(findobj(gcf, 'type','axes'), 'XTick',[])
       set(findobj(gcf, 'type','axes'), 'YTick',[])
+      
+      this.currentNode = [];
      
       
       
@@ -96,51 +106,55 @@ classdef mda < handle
     
     function update(this)
       
-      data = this.currentNode.handle.UserData;
+      if ~isempty(this.currentNode)
       
-      % update state
-      if ~isempty(data.locate)
-        set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Located')
-        set(this.gui.getHandle('textLocateState'), 'String', 'Located', 'ForegroundColor', [0 1 0])
-      else
-        set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Not Located Yet')
-        set(this.gui.getHandle('textLocateState'), 'String', 'Not Located', 'ForegroundColor', [1 0 0])
-      end
+        data = this.currentNode.handle.UserData;
 
-      if ~isempty(data.track)
-        set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Tracked')
-        set(this.gui.getHandle('textTrackState'), 'String', 'Tracked', 'ForegroundColor', [0 1 0])
-      else
-        set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Not Tracked Yet')
-        set(this.gui.getHandle('textTrackState'), 'String', 'Not Tracked', 'ForegroundColor', [1 0 0])
-      end
-      
-      if ~isempty(data.calibrate)
-        set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Calibrated')
-        set(this.gui.getHandle('textCalibrateState'), 'String', 'Calibrated', 'ForegroundColor', [0 1 0])
-        
-        % update calibrate list
-        minTrack = this.gui.getText('textTrackMinTrack2', 'numeric');
-        
-        hListbox = this.gui.getHandle('listCalibrate');
-        mask = cell2mat(data.calibrate(:,5))  >= minTrack;
-        data = sortrows(data.calibrate(mask,:),-5);
-
-        n = size(data,1);
-
-        list = cell(n,1);
-
-        for i = 1:n
-
-          list{i} = ['Track ID ' num2str(data{i,4}) ' (' num2str(data{i,5}) ')'];
-
+        % update state
+        if ~isempty(data.locate)
+          set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Located')
+          set(this.gui.getHandle('textLocateState'), 'String', 'Located', 'ForegroundColor', [0 1 0])
+        else
+          set(this.gui.getHandle('textInfoStateLocate'), 'String', 'Not Located Yet')
+          set(this.gui.getHandle('textLocateState'), 'String', 'Not Located', 'ForegroundColor', [1 0 0])
         end
-      
-      set(hListbox, 'String', list);
+
+        if ~isempty(data.track)
+          set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Tracked')
+          set(this.gui.getHandle('textTrackState'), 'String', 'Tracked', 'ForegroundColor', [0 1 0])
+        else
+          set(this.gui.getHandle('textInfoStateTrack'), 'String', 'Not Tracked Yet')
+          set(this.gui.getHandle('textTrackState'), 'String', 'Not Tracked', 'ForegroundColor', [1 0 0])
+        end
+
+        if ~isempty(data.calibrate)
+          set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Calibrated')
+          set(this.gui.getHandle('textCalibrateState'), 'String', 'Calibrated', 'ForegroundColor', [0 1 0])
+
+          % update calibrate list
+          minTrack = this.gui.getText('textTrackMinTrack2', 'numeric');
+
+          hListbox = this.gui.getHandle('listCalibrate');
+          mask = cell2mat(data.calibrate(:,5))  >= minTrack;
+          data = sortrows(data.calibrate(mask,:),-5);
+
+          n = size(data,1);
+
+          list = cell(n,1);
+
+          for i = 1:n
+
+            list{i} = ['Track ID ' num2str(data{i,4}) ' (' num2str(data{i,5}) ')'];
+
+          end
+
+        set(hListbox, 'String', list);
+
+        else
+          set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Not Calibrated Yet')
+          set(this.gui.getHandle('textCalibrateState'), 'String', 'Not Calibrated', 'ForegroundColor', [1 0 0])
+        end
         
-      else
-        set(this.gui.getHandle('textInfoStateCalibrate'), 'String', 'Not Calibrated Yet')
-        set(this.gui.getHandle('textCalibrateState'), 'String', 'Not Calibrated', 'ForegroundColor', [1 0 0])
       end
       
       

@@ -13,7 +13,15 @@ function buttonCreateMask(this)
   
   delete(h);
   
+
+  % show picture in locate
+  axes(this.getHandle('axesLocate'))
   hMda.drawROI(position);
+  
+  % show picture in locate
+  axes(this.getHandle('axesTrack'))
+  hMda.drawROI(position);
+  
   
 end
 
