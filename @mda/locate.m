@@ -45,7 +45,7 @@ function locate(this, overwrite)
         img = imread(filename,'Index',j,'Info',info); 
         
         if(isfield(data,'mask'))
-          mask = data.mask;
+          mask = data.mask.bw;
         else
           mask = [];
         end

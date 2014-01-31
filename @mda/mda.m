@@ -163,8 +163,12 @@ classdef mda < handle
     function mousePressedCallback(~, eventData)
       
       this = getappdata(0, 'hMda');
+      
+      hTree = this.gui.getHandle('treeMain');
+      
+      selNodes = hTree.handle.getSelectedNodes();
 
-      if eventData.getClickCount==2 
+      if eventData.getClickCount==2 && selNodes(1).isLeaf
         this.apply()
       end
       
@@ -176,6 +180,29 @@ classdef mda < handle
 
       if eventData.getKeyCode == 10
         this.apply()
+      end
+      
+      if eventData.getKeyCode == 113
+
+          hTree = this.gui.getHandle('treeMain');
+          
+          selNodes = hTree.handle.getSelectedNodes();
+
+          if numel(selNodes) == 1 && selNodes(1).getLevel == 1
+            
+            path = uigetdir; 
+            selNodes(1).handle.UserData.string = [path '/'];
+            
+            if numel(selNodes(1).handle.UserData.string) > 20
+              selNodes(1).setName(['...' selNodes(1).handle.UserData.string(end-20:end)]);
+            else
+              selNodes(1).setName(selNodes(1).handle.UserData.string)
+            end
+            
+            drawnow;
+            
+          end
+          
       end
       
     end   
