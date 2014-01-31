@@ -15,5 +15,14 @@ function sliderInfo(this)
   img = imread(path,'Index',index); 
   imshow(img, [this.getText('textInfoHistMin', 'numeric') this.getText('textInfoHistMax', 'numeric')]) 
   
+  hMda = getappdata(0,'hMda');
+  data = hMda.currentNode.handle.UserData;
+  
+  % draw ROI
+  if(isfield(data,'mask'))
+    hMda.drawROI(data.mask.position)
+  end
+  
+  
 end
 

@@ -22,7 +22,7 @@ function apply(this)
   
   % save current Node
   this.currentNode = selectedNodes{1};
-  
+  data = this.currentNode.handle.UserData;
   
   % get file location
   file = selectedNodes{1}.handle.UserData.string;
@@ -35,13 +35,23 @@ function apply(this)
   
   axes(this.gui.getHandle('axesTrack'))
   imshow(img, [this.gui.getText('textInfoHistMin', 'numeric') this.gui.getText('textInfoHistMax', 'numeric')]) 
+  if(isfield(data,'mask'))
+    this.drawROI(data.mask.position)
+  end
   
   axes(this.gui.getHandle('axesLocate'))
   imshow(img, [this.gui.getText('textInfoHistMin', 'numeric') this.gui.getText('textInfoHistMax', 'numeric')]) 
+  if(isfield(data,'mask'))
+    this.drawROI(data.mask.position)
+  end
   
   axes(this.gui.getHandle('axesInfo'))
   imshow(img, [this.gui.getText('textInfoHistMin', 'numeric') this.gui.getText('textInfoHistMax', 'numeric')]) 
-    
+  if(isfield(data,'mask'))
+    this.drawROI(data.mask.position)
+  end  
+  
+  
   
   % update info panel
   set(this.gui.getHandle('textInfoName2'), 'String', [path file])
